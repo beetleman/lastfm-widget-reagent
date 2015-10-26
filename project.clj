@@ -3,12 +3,12 @@
                  [org.clojure/clojurescript "1.7.145"]
                  [reagent "0.5.1"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
-                 [cljs-ajax "0.3.14"]]
+                 [cljs-ajax "0.5.1"]]
 
   :source-paths ["src/clj"]
 
   :plugins [[lein-cljsbuild "1.0.6"]
-            [lein-figwheel "0.4.1"]]
+            [lein-figwheel "0.3.9"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
 
@@ -26,7 +26,7 @@
                                    :asset-path "js/compiled/out"
                                    :main lastfm-widget-reagent.core
                                    :optimizations :none
-                                   :pretty-print true}}]}
+                                   :source-map-timestamp true}}]}
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
