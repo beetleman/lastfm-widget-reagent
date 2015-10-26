@@ -87,7 +87,7 @@
         (map #(% track)
              [get-album-cover get-title get-artist get-album])))
 
-(def update-tracks
+(defn update-tracks
   ([tracks] (update-tracks tracks 5000))
   ([tracks time]
   (go
