@@ -87,38 +87,34 @@
         (map #(% track)
              [get-album-cover get-title get-artist get-album])))
 
-(defn update-tracks
-  ([tracks] (update-tracks tracks 5000))
-  ([tracks time]
-  (go
-    (loop []
-      (getRecentTracks
-       user_name
-       (make-handler :tracks tracks [:recenttracks :track])
-       (make-handler :error tracks)
-       track_number)
-      (<! (timeout time))
-      (recur)))))
+(defn run-data-updater
+  ([data track_number] (run-data-updater data track_number 5000))
+  ([data track_number time]
+   (js/setInterval
+    #(getRecentTracks
+      user_name
+      (make-handler :tracks data [:recenttracks :track])
+      (make-handler :error data)
+      track_number) time)))
 
-(defn create-lastfm-widget-view [user_name track_number app-state]
-  (fn [tracks]
-      (render-state [this state]
-        (cond
-          (:error-api data)
-          (get-error-message (get-in data [:error-api :message]))
-          (:error data)
-          (get-error-message "Connection problem")
-          :else
-          (apply dom/ul #js {:className "tracks"}
-                 (om/build-all track-view (:tracks data)))))))
+(defn create-lastfm-widget-view [user_name track_number data]
+  (fn []
+    (cond
+      (:error-api @data)
+      (get-error-message (get-in @data [:error-api :message]))
+      (:error @data)
+      (get-error-message "Connection problem")
+      :else
+      (into [:ul {:class "tracks"}]
+            (map track-view (:tracks @data))))))
 
-(defn home []
-  [:div
-   [:h "HellWorld!"]])
-
-(defn ^:export main []
-  (reagent/render [home]
-                  (.getElementById js/document "app")))
+(defn ^:export create [user_name track_number id]
+  (let [app-state (reagent/atom {:tracks []
+                                 :error-api nil
+                                 :error nil})
+        interval (run-data-updater app-state track_number)]
+    (reagent/render [(create-lastfm-widget-view user_name track_number app-state)]
+                    (.getElementById js/document id))))
 
 (defn on-js-reload []
   )

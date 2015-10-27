@@ -4,8 +4,12 @@
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
     </heaf>
     <body>
-        <div id="app"></div>
+        <div id="app1"></div>
+        <div id="app2"></div>
         <script src="js/compiled/lastfm-widget.js"></script>
-        <script>lastfm_widget_reagent.core.main();</script>
+        <script type="text/javascript">
+         lastfm_widget_reagent.core.create("robal_pro", 5, "app1");
+         lastfm_widget_reagent.core.create("evil_twin_robal_pro", 2, "app2");
+        </script>
     </body>
 </html>
